@@ -1,0 +1,4 @@
+NO_CORES=2
+RAM=2
+CORPUS_LOC=test_webbase
+TRAIN_STEMMED=true
