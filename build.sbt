@@ -12,9 +12,9 @@ libraryDependencies += "org.apache.spark" %% "spark-mllib" % "1.2.0"
 
 libraryDependencies += "org.scalanlp" % "epic_2.10" % "0.3"
 
-libraryDependencies += "edu.stanford.nlp" % "stanford-corenlp" % "3.5.0"
+libraryDependencies += "edu.stanford.nlp" % "stanford-corenlp" % "3.4"
 
-libraryDependencies += "edu.stanford.nlp" % "stanford-corenlp" % "3.5.0" classifier "models"
+libraryDependencies += "edu.stanford.nlp" % "stanford-corenlp" % "3.4" classifier "models"
 
 libraryDependencies += "org.apache.lucene" % "lucene-analyzers-common" % "4.10.3"
 
