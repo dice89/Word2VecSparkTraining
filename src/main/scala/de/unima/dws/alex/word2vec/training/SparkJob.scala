@@ -29,7 +29,7 @@ object SparkJobs {
     .setAppName("Alex Master Thesis")
     .setMaster("local["+Config.NO_OF_CORES+"]")
     .set("spark.executor.memory", Config.RAM+"g")
-  //.set("spark.rdd.compress", "true")
+    .set("spark.rdd.compress", "true")
 
   val sc = new SparkContext(conf)
   
@@ -39,6 +39,8 @@ object SparkJobs {
 
     val files: ParSeq[File] = folder.listFiles(new TxtFileFilter).toIndexedSeq.par
 
+
+    println(files)
     var i = 0;
 
     //preprocess files parallel
@@ -47,8 +49,7 @@ object SparkJobs {
       props.setProperty("annotators", "tokenize, ssplit");
       val pipeline = new StanfordCoreNLP(props);
       //preprocess line of file
-
-
+      println(file.getName() +"-" + file.getTotalSpace())
       val rdd_lines: Iterator[Option[Seq[String]]] = for (line <- Source.fromFile(file,"utf-8").getLines) yield {
         if (stemmed) {
           processWebBaseLineStemmed(pipeline,line)
@@ -73,6 +74,8 @@ object SparkJobs {
 
     word2vec.setVectorSize(100)
     val model: Word2VecModel = word2vec.fit(rdd_file)
+
+
 
     println("Training time: " + (System.currentTimeMillis() - starttime))
     if(stemmed){
