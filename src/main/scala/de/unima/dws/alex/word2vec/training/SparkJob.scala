@@ -49,7 +49,7 @@ object SparkJobs {
       //preprocess line of file
 
 
-      val rdd_lines: Iterator[Option[Seq[String]]] = for (line <- Source.fromFile(file).getLines) yield {
+      val rdd_lines: Iterator[Option[Seq[String]]] = for (line <- Source.fromFile(file,"utf-8").getLines) yield {
         if (stemmed) {
           processWebBaseLineStemmed(pipeline,line)
         } else {

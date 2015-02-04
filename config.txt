@@ -1,4 +1,4 @@
-NO_CORES=2
-RAM=2
-CORPUS_LOC=test_webbase
+NO_CORES=*
+RAM=100
+CORPUS_LOC=/data2/alexanda/webbase_all
 TRAIN_STEMMED=true
