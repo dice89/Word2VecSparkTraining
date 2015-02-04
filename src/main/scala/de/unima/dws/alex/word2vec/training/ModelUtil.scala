@@ -2,14 +2,15 @@ package de.unima.dws.alex.word2vec.training
 
 import java.io.{ObjectOutputStream, FileOutputStream, ObjectInputStream, FileInputStream}
 import java.util
-import java.util.Properties
 
+import de.unima.dws.alex.word2vec.coreNLP.CoreNLP
 import edu.stanford.nlp.ling.CoreAnnotations.{TextAnnotation, SentencesAnnotation, TokensAnnotation}
 import edu.stanford.nlp.ling.CoreLabel
 import edu.stanford.nlp.pipeline.{Annotation, StanfordCoreNLP}
+import edu.stanford.nlp.util.CoreMap
 import org.apache.spark.mllib.feature.Word2VecModel
 import org.tartarus.snowball.ext.PorterStemmer
-import scala.collection.JavaConversions._
+import scala.collection.convert.Wrappers
 import scala.collection.immutable.IndexedSeq
 import scala.collection.mutable
 
@@ -53,18 +54,32 @@ object ModelUtil extends  App {
 
 
 
-  def tokenizeText(text:String, pipeline:StanfordCoreNLP) :IndexedSeq[IndexedSeq[String]] = {
+  def tokenizeText(text:String, pipeline:StanfordCoreNLP) :IndexedSeq[String]= {
+
+
+    val test: Array[String] = CoreNLP.tokenize(text,pipeline)
+
+
 
     // create an empty Annotation just with the given text
-    val document = new Annotation(text);
+   /* val document = new Annotation(text);
 
     // run all Annotators on this text
     pipeline.annotate(document);
 
-    val sentences = document.get(classOf[SentencesAnnotation]);
+    val sentences: util.List[CoreMap] = document.get(classOf[SentencesAnnotation]);
 
-    val tokens: IndexedSeq[IndexedSeq[String]] = sentences.map(sentence  => sentence.get(classOf[TokensAnnotation]).toIndexedSeq.map(token => token.get(classOf[TextAnnotation]).replaceAll("[^\\w\\s]",""))).toIndexedSeq
+*/
+    /*for(sentence <- sentences){
 
-    tokens
+    }*/
+
+    //val test: Wrappers.JListWrapper[CoreMap] = JListWrapper(sentences)
+
+   // val sentences_new: IndexedSeq[IndexedSeq[CoreLabel]] = test.toIndexedSeq.map(sentence  => JListWrapper(sentence.get(classOf[TokensAnnotation])).toIndexedSeq)
+
+   // val tokens = sentences_new.map(sentence => sentence.map(token => token.get(classOf[TextAnnotation]).replaceAll("[^\\w\\s]","")))
+
+    test.toIndexedSeq
   }
 }

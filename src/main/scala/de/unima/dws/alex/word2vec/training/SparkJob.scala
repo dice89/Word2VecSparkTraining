@@ -90,10 +90,8 @@ object SparkJobs {
       Option.empty
     } else {
       val text = line.replace("\"", "")
-      val sentences: IndexedSeq[IndexedSeq[String]] = ModelUtil.tokenizeText(text, pipeline)
-      val words_seq = sentences.map(sentence => sentence.map(word => {
-        word.toLowerCase()
-      })).flatten.toSeq
+      val tokens: IndexedSeq[String] = ModelUtil.tokenizeText(text, pipeline)
+      val words_seq = tokens.map(token => token.toLowerCase())
       Option(words_seq)
     }
   }
@@ -103,10 +101,10 @@ object SparkJobs {
       Option.empty
     } else {
       val text = line.replace("\"", "")
-      val sentences: IndexedSeq[IndexedSeq[String]] = ModelUtil.tokenizeText(text, pipeline)
-      val words_seq = sentences.map(sentence => sentence.map(word => {
-        ModelUtil.porter_stem(word.toLowerCase())
-      })).flatten.toSeq
+
+      val tokens: IndexedSeq[String] = ModelUtil.tokenizeText(text, pipeline)
+      val words_seq = tokens.map(token => ModelUtil.porter_stem(token.toLowerCase()))
+
       Option(words_seq)
     }
   }
