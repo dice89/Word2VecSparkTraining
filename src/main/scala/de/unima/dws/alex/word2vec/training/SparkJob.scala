@@ -42,12 +42,13 @@ object SparkJobs {
 
     println(files)
     var i = 0;
+    val props = new Properties();
+    props.setProperty("annotators", "tokenize, ssplit");
+    props.setProperty("nthreads","10")
+    val pipeline = new StanfordCoreNLP(props);
 
     //preprocess files parallel
     val training_data_raw: ParSeq[RDD[Seq[String]]] = files.map(file => {
-      val props = new Properties();
-      props.setProperty("annotators", "tokenize, ssplit");
-      val pipeline = new StanfordCoreNLP(props);
       //preprocess line of file
       println(file.getName() +"-" + file.getTotalSpace())
       val rdd_lines: Iterator[Option[Seq[String]]] = for (line <- Source.fromFile(file,"utf-8").getLines) yield {
