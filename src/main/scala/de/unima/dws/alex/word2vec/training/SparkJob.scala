@@ -5,11 +5,12 @@ package de.unima.dws.alex.word2vec.training
  */
 
 import java.io._
+import java.util.Properties
 
-import de.unima.dws.alex.word2vec.usage.CosineSimilarity
+
+import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import epic.preprocess.{MLSentenceSegmenter, TreebankTokenizer}
 import org.apache.spark.mllib.feature.{Word2Vec, Word2VecModel}
-import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 import org.tartarus.snowball.ext.PorterStemmer
@@ -42,16 +43,18 @@ object SparkJobs {
 
     //preprocess files parallel
     val training_data_raw: ParSeq[RDD[Seq[String]]] = files.map(file => {
-      val sentenceSplitter = MLSentenceSegmenter.bundled().get
-      val tokenizer = new epic.preprocess.TreebankTokenizer()
+      val props = new Properties();
+      props.setProperty("annotators", "tokenize, ssplit");
+      val pipeline = new StanfordCoreNLP(props);
       //preprocess line of file
+
+
       val rdd_lines: Iterator[Option[Seq[String]]] = for (line <- Source.fromFile(file).getLines) yield {
         if (stemmed) {
-          processWebBaseLineStemmed(sentenceSplitter, tokenizer, line)
+          processWebBaseLineStemmed(pipeline,line)
         } else {
-          processWebBaseLine(sentenceSplitter, tokenizer, line)
+          processWebBaseLine(pipeline, line)
         }
-
       }
       val filtered_rdd_lines = rdd_lines.filter(line => line.isDefined).map(line => line.get).toList
       println(s"File $i done")
@@ -72,17 +75,22 @@ object SparkJobs {
     val model: Word2VecModel = word2vec.fit(rdd_file)
 
     println("Training time: " + (System.currentTimeMillis() - starttime))
-    storeWord2VecModel(model, Config.WORD2VEC_MODEL_PATH)
+    if(stemmed){
+      ModelUtil.storeWord2VecModel(model, Config.STEMMED_WORD2VEC_MODEL_PATH)
+
+    }else {
+      ModelUtil.storeWord2VecModel(model, Config.WORD2VEC_MODEL_PATH)
+    }
 
   }
 
 
-  def processWebBaseLine(sentenceSplitter: MLSentenceSegmenter, tokenizer: TreebankTokenizer, line: String): Option[Seq[String]] = {
+  def processWebBaseLine(pipeline: StanfordCoreNLP, line: String): Option[Seq[String]] = {
     if (line.isEmpty) {
       Option.empty
     } else {
       val text = line.replace("\"", "")
-      val sentences: IndexedSeq[IndexedSeq[String]] = sentenceSplitter(text).map(tokenizer).toIndexedSeq
+      val sentences: IndexedSeq[IndexedSeq[String]] = ModelUtil.tokenizeText(text, pipeline)
       val words_seq = sentences.map(sentence => sentence.map(word => {
         word.toLowerCase()
       })).flatten.toSeq
@@ -90,48 +98,23 @@ object SparkJobs {
     }
   }
 
-  def processWebBaseLineStemmed(sentenceSplitter: MLSentenceSegmenter, tokenizer: TreebankTokenizer, line: String): Option[Seq[String]] = {
+  def processWebBaseLineStemmed(pipeline: StanfordCoreNLP, line: String): Option[Seq[String]] = {
     if (line.isEmpty) {
       Option.empty
     } else {
       val text = line.replace("\"", "")
-      val sentences: IndexedSeq[IndexedSeq[String]] = sentenceSplitter(text).map(tokenizer).toIndexedSeq
+      val sentences: IndexedSeq[IndexedSeq[String]] = ModelUtil.tokenizeText(text, pipeline)
       val words_seq = sentences.map(sentence => sentence.map(word => {
-        porter_stem(word.toLowerCase())
+        ModelUtil.porter_stem(word.toLowerCase())
       })).flatten.toSeq
       Option(words_seq)
     }
   }
 
 
-  def loadWord2VecModel(file: String): Word2VecModel = {
-    val file_in = new FileInputStream(file)
-    val obj_in = new ObjectInputStream(file_in);
 
-    val model: Word2VecModel = obj_in.readObject().asInstanceOf[Word2VecModel]
 
-    obj_in.close()
-    file_in.close()
 
-    model
-  }
 
-  def storeWord2VecModel(model: Word2VecModel, file: String): Unit = {
-    val file_out = new FileOutputStream(file)
-    val obj_out = new ObjectOutputStream(file_out)
-    obj_out.writeObject(model);
-    obj_out.flush()
-    obj_out.close()
-    file_out.flush()
-    file_out.close()
-  }
 
-  def porter_stem(a: String): String = {
-    val stemmer: PorterStemmer = new PorterStemmer()
-    stemmer.setCurrent(a)
-    if (stemmer.stem()) {
-      stemmer.getCurrent
-    }
-    a
-  }
 }
