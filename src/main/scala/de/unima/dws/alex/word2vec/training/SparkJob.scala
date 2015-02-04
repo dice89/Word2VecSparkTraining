@@ -39,8 +39,8 @@ object SparkJobs {
 
     val files: ParSeq[File] = folder.listFiles(new TxtFileFilter).toIndexedSeq.par
 
+    val filtered_files: ParSeq[File] = files.zipWithIndex.filter(tuple=> tuple._2 < 41).map(tuple=> tuple._1)
 
-    println(files)
     var i = 0;
     val props = new Properties();
     props.setProperty("annotators", "tokenize, ssplit");
@@ -48,7 +48,7 @@ object SparkJobs {
     val pipeline = new StanfordCoreNLP(props);
 
     //preprocess files parallel
-    val training_data_raw: ParSeq[RDD[Seq[String]]] = files.map(file => {
+    val training_data_raw: ParSeq[RDD[Seq[String]]] = filtered_files.map(file => {
       //preprocess line of file
       println(file.getName() +"-" + file.getTotalSpace())
       val rdd_lines: Iterator[Option[Seq[String]]] = for (line <- Source.fromFile(file,"utf-8").getLines) yield {
