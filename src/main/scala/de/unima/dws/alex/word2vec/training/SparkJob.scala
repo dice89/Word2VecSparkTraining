@@ -65,11 +65,8 @@ object SparkJobs {
       sc.parallelize(filtered_rdd_lines).persist(StorageLevel.MEMORY_ONLY_SER)
     })
 
-
-    val rdd_file = training_data_raw.seq.reduceLeft((A, B) => {
-      A.union(B)
-    })
-
+    val rdd_file =  sc.union(training_data_raw.seq)
+    
     val starttime = System.currentTimeMillis()
     println("Start Training")
     val word2vec = new Word2Vec()
