@@ -12,6 +12,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import epic.preprocess.{MLSentenceSegmenter, TreebankTokenizer}
 import org.apache.spark.mllib.feature.{Word2Vec, Word2VecModel}
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 import org.apache.spark.{SparkConf, SparkContext}
 import org.tartarus.snowball.ext.PorterStemmer
 
@@ -61,7 +62,7 @@ object SparkJobs {
       val filtered_rdd_lines = rdd_lines.filter(line => line.isDefined).map(line => line.get).toList
       println(s"File $i done")
       i = i + 1
-      sc.parallelize(filtered_rdd_lines)
+      sc.parallelize(filtered_rdd_lines).persist(StorageLevel.MEMORY_ONLY_SER)
     })
 
 
