@@ -40,7 +40,7 @@ object SparkJobs {
 
     val files: ParSeq[File] = folder.listFiles(new TxtFileFilter).toIndexedSeq.par
 
-    val filtered_files: ParSeq[File] = files.zipWithIndex.filter(tuple=> tuple._2 < 41).map(tuple=> tuple._1)
+    val filtered_files: ParSeq[File] = files.zipWithIndex.filter(tuple=> tuple._2 < 100).map(tuple=> tuple._1)
 
     var i = 0;
     val props = new Properties();
@@ -63,10 +63,11 @@ object SparkJobs {
       println(s"File $i done")
       i = i + 1
       sc.parallelize(filtered_rdd_lines).persist(StorageLevel.MEMORY_ONLY_SER)
+
     })
 
     val rdd_file =  sc.union(training_data_raw.seq)
-    
+
     val starttime = System.currentTimeMillis()
     println("Start Training")
     val word2vec = new Word2Vec()
