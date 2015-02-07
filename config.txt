@@ -1,4 +1,4 @@
-NO_CORES=*
-RAM=150
-CORPUS_LOC=/data2/alexanda/webbase_all
+NO_CORES=2
+RAM=4
+CORPUS_LOC=/Users/mueller/Downloads/webbase_all
 TRAIN_STEMMED=false

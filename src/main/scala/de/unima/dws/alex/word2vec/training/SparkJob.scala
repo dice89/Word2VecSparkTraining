@@ -40,12 +40,12 @@ object SparkJobs {
 
     val files: ParSeq[File] = folder.listFiles(new TxtFileFilter).toIndexedSeq.par
 
-    val filtered_files: ParSeq[File] = files.zipWithIndex.filter(tuple=> tuple._2 < 100).map(tuple=> tuple._1)
+    val filtered_files: ParSeq[File] = files.zipWithIndex.filter(tuple=> tuple._2 < 4).map(tuple=> tuple._1)
 
     var i = 0;
     val props = new Properties();
     props.setProperty("annotators", "tokenize, ssplit");
-    props.setProperty("nthreads","10")
+    props.setProperty("nthreads","2")
     val pipeline = new StanfordCoreNLP(props);
 
     //preprocess files parallel
@@ -93,7 +93,8 @@ object SparkJobs {
       Option.empty
     } else {
       val text = line.replace("\"", "")
-      val tokens: IndexedSeq[String] = ModelUtil.tokenizeText(text, pipeline)
+      //stopword filtering included
+      val tokens: IndexedSeq[String] = ModelUtil.tokenizeText(text, pipeline).filter(token => ModelUtil.stoplist.contains(token.toLowerCase))
       val words_seq = tokens.map(token => token.toLowerCase())
       Option(words_seq)
     }
@@ -104,8 +105,8 @@ object SparkJobs {
       Option.empty
     } else {
       val text = line.replace("\"", "")
-
-      val tokens: IndexedSeq[String] = ModelUtil.tokenizeText(text, pipeline)
+      //stopword filtering included
+      val tokens: IndexedSeq[String] = ModelUtil.tokenizeText(text, pipeline).filter(token => ModelUtil.stoplist.contains(token.toLowerCase))
       val words_seq = tokens.map(token => ModelUtil.porter_stem(token.toLowerCase()))
 
       Option(words_seq)

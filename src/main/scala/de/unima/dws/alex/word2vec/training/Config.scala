@@ -6,6 +6,8 @@ import scala.io.Source
  * Created by mueller on 03/02/15.
  */
 object Config {
+  val stoplist: String = "stoplist.txt"
+
   val STEMMED_WORD2VEC_MODEL_PATH: String = "models/model_word2vec_stemmed.ser"
 
   val WORD2VEC_MODEL_PATH: String = "models/model_word2vec.ser"

@@ -13,11 +13,14 @@ import org.tartarus.snowball.ext.PorterStemmer
 import scala.collection.convert.Wrappers
 import scala.collection.immutable.IndexedSeq
 import scala.collection.mutable
+import scala.io.Source
 
 /**
  * Created by mueller on 04/02/15.
  */
-object ModelUtil extends  App {
+object ModelUtil {
+
+  val stoplist:IndexedSeq[String] = createStopWordList(Config.stoplist)
 
   def loadWord2VecModel(file: String): Word2VecModel = {
     val file_in = new FileInputStream(file)
@@ -50,6 +53,10 @@ object ModelUtil extends  App {
       a
     }
 
+  }
+
+  def createStopWordList(file:String):IndexedSeq[String] = {
+    Source.fromFile(file,"utf-8").getLines.map(stopword => stopword.trim).toIndexedSeq
   }
 
 
