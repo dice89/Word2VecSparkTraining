@@ -1,5 +1,5 @@
 # Word2Vec Trained for Apache Spark
-Simple Project to train Word2Vec 100-dimensional word similarity vectors based on the Apache Spark utilty with the UMBC Webbase corpus[1] as training data.
+Simple Project to train Word2Vec 100-dimensional word similarity vectors based on the Apache Spark utilty with the UMBC Webbase corpus [1] as training data.
 
 There exists currently 3 sizes of vectors:
 
@@ -52,7 +52,7 @@ Check the build.sbt for details
   val term1 = "house"
   val term2 = "building"
 
-l unstemmed_similarity = cousineSimilarityBetweenTerms(unstemmed_model, term1, term2)
+  val unstemmed_similarity = cousineSimilarityBetweenTerms(unstemmed_model, term1, term2)
 ````
 
 #### Stemmed
