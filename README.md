@@ -3,7 +3,7 @@ Simple Project to train Word2Vec 100-dimensional word similarity vectors based o
 
 There exists currently 3 sizes of vectors:
 
--XS : Trained on 10 % of the webbase corpus
+- XS : Trained on 10 % of the webbase corpus
 - S : Trained on 25 % of the webbase corpus
 - M : Trained on 50% of the webbase corpus
 
