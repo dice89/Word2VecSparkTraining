@@ -11,6 +11,8 @@ The preprocessing used can be separated into two different groups. For both grou
 - Unstemmed tokenized preprocessing : Uses simply the stanford core NLP tokenizer [2] to tokenize the given text
 - Stemmed tokenized processing: Uses the same tokenization as above. But stemms the tokens using the porter stemmer implemented in apache lucene [3]
 
+Furthermore a cosine similarity method was integrated in order to compute the similarity between two given word vectors. For the usage refer to the usage section.
+
 ## Usage
 The following libraries were used as dependencies
 - Spark Core
