@@ -25,7 +25,7 @@ Check the build.sbt for details
 
 #### Stemmed
 ````
-    Word2VecModel model_stemmed = ModelUtil.loadWord2VecModel("/Users/mueller/Coding/Word2Vectors/webbase10p/model_word2vec_stemmed.ser");
+    Word2VecModel model_stemmed = ModelUtil.loadWord2VecModel("Word2Vectors/webbase10p/model_word2vec_stemmed.ser");
     
     String term1= "scholar";
     String term2 ="student";
@@ -37,7 +37,7 @@ Check the build.sbt for details
 
 ### Unstemmed
 ````
-    Word2VecModel model_unstemmed = ModelUtil.loadWord2VecModel("/Users/mueller/Coding/Word2Vectors/webbase10p/model_word2vec.ser");
+    Word2VecModel model_unstemmed = ModelUtil.loadWord2VecModel("Word2Vectors/webbase10p/model_word2vec.ser");
 
     String term1= "scholar";
     String term2 ="student";
