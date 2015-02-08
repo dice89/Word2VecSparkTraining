@@ -23,6 +23,16 @@ The following libraries were used as dependencies
 Check the build.sbt for details
 ### Java
 
+### Unstemmed
+````
+    Word2VecModel model_unstemmed = ModelUtil.loadWord2VecModel("Word2Vectors/webbase10p/model_word2vec.ser");
+
+    String term1= "scholar";
+    String term2 ="student";
+ 
+    double similarity = Word2VecSim.cousineSimilarityBetweenTerms(model_unstemmed,term1,term2);
+````
+
 #### Stemmed
 ````
     Word2VecModel model_stemmed = ModelUtil.loadWord2VecModel("Word2Vectors/webbase10p/model_word2vec_stemmed.ser");
@@ -33,34 +43,31 @@ Check the build.sbt for details
     //To Stem terms the Porter Stemmer from Apache Lucene is used
     double similarity = Word2VecSim.cousineSimilarityBetweenTerms(model_stemmed,ModelUtil.porter_stem(term1),ModelUtil.porter_stem(term2));
 ````
-
-
-### Unstemmed
-````
-    Word2VecModel model_unstemmed = ModelUtil.loadWord2VecModel("Word2Vectors/webbase10p/model_word2vec.ser");
-
-    String term1= "scholar";
-    String term2 ="student";
- 
-    double similarity = Word2VecSim.cousineSimilarityBetweenTerms(model_unstemmed,term1,term2);
-    System.out.println("Similarity between unstemmed" + term1 + " " + term2 +" is "+ result_unstemmed);
-````
 ### Scala 
 
-TODO
+#### Unstemmed
+````
+  val unstemmed_model = ModelUtil.loadWord2VecModel("/Users/mueller/Coding/Word2Vectors/webbase10p/model_word2vec_stemmed.ser");
+
+  val term1 = "house"
+  val term2 = "building"
+
+l unstemmed_similarity = cousineSimilarityBetweenTerms(unstemmed_model, term1, term2)
+````
+
+#### Stemmed
+````
+  val stemmed_model = ModelUtil.loadWord2VecModel("/Users/mueller/Coding/Word2Vectors/webbase10p/model_word2vec_stemmed.ser");
+  
+  val term1 = "house"
+  val term2 = "building"
+
+  val similarity = cousineSimilarityBetweenTerms(stemmed_model, ModelUtil.porter_stem(term1), ModelUtil.porter_stem(term2))
+
+````
 
 ##References
 
 1.  http://ebiquity.umbc.edu/resource/html/id/351/UMBC-webbase-corpus
 2.  http://nlp.stanford.edu/software/corenlp.shtml
 3.  http://lucene.apache.org/core/3_0_3/api/contrib-snowball/
-
-
-
-
-
-
-
-
-
-<script src="https://gist.github.com/dice89/2c313bd5cfff0a4fb599.js"></script>
