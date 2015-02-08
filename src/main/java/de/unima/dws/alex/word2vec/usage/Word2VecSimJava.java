@@ -28,7 +28,7 @@ public class Word2VecSimJava {
 
         //get synonyms for term
         System.out.println("Get Top 20 Synonyms for "+term1);
-        for (Tuple2<String, Object> lunch : model_stemmed.findSynonyms(term1, 20)) {
+        for (Tuple2<String, Object> lunch : model_stemmed.findSynonyms(ModelUtil.porter_stem(term1), 20)) {
             System.out.println(lunch._1());
         }
 
