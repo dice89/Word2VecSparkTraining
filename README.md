@@ -12,7 +12,7 @@ The preprocessing used can be separated into two different groups. For both grou
 - Stemmed tokenized processing: Uses the same tokenization as above. But stemms the tokens using the porter stemmer implemented in apache lucene [3]
 
 ## Usage
-The following libraries were used as depencies
+The following libraries were used as dependencies
 - Spark Core
 - Spark MLLib
 - Apache Lucene
